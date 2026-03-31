@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+<<<<<<< HEAD
+      <module fileurl="file://$PROJECT_DIR$/../../APProjClient/APProjClient/APProjClient.iml" filepath="$PROJECT_DIR$/../../APProjClient/APProjClient/APProjClient.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/APProjClient2.iml" filepath="$PROJECT_DIR$/APProjClient2.iml" />
+>>>>>>> 20c15c3 (Initial commit)
+    </modules>
+  </component>
+</project>
