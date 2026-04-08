@@ -215,8 +215,7 @@ public class ClientController {
 
 	public static void main(String[] args) {
 
-		ClientController client = new ClientController();
-		client.addNewUser("tech", "tech", 1);
+		new ClientController();
 	}
 
 }
