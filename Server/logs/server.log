@@ -1,0 +1,13 @@
+2026-04-12 14:12:51 INFO  [main] Server - Starting server application
+2026-04-12 14:12:51 INFO  [main] Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-04-12 14:12:51 INFO  [main] RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-04-12 14:12:51 WARN  [main] pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+2026-04-12 14:12:51 INFO  [main] pooling - HHH10001005: Loaded JDBC driver class: com.mysql.cj.jdbc.Driver
+2026-04-12 14:12:51 INFO  [main] pooling - HHH10001012: Connecting with JDBC URL [jdbc:mysql://127.0.0.1:3307/approj]
+2026-04-12 14:12:51 INFO  [main] pooling - HHH10001001: Connection properties: {password=****, user=root}
+2026-04-12 14:12:51 INFO  [main] pooling - HHH10001003: Autocommit mode: false
+2026-04-12 14:12:51 INFO  [main] pooling - HHH10001115: Connection pool size: 20 (min=1)
+2026-04-12 14:12:51 WARN  [main] Dialect - HHH000511: The 5.6.13 version for [org.hibernate.dialect.MySQLDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 8.0.0. Check the community dialects project for available legacy versions.
+2026-04-12 14:12:51 WARN  [main] deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-04-12 14:12:52 INFO  [main] EntityInstantiatorPojoStandard - HHH000182: No default (no-argument) constructor for class: model.LabSeat (class must be instantiated by Interceptor)
+2026-04-12 14:12:52 INFO  [main] JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)

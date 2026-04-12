@@ -24,6 +24,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import controller.ClientHandler;
@@ -31,6 +33,7 @@ import controller.PasswordHashGen;
 
 
 public class Server{
+	private static final Logger logger = LogManager.getLogger(Server.class);
 	private ServerSocket servSocket = null;
 	private Socket socket = null;
 	
@@ -46,12 +49,11 @@ public class Server{
 			objectManagement();
 			while(true) {
 				waitForRequest();
-				System.out.print("Server is listening");
+				logger.info("Server is listening");
 			}
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Failed to start server on port 8888", e);
 		}
 	}
 	
@@ -75,11 +77,11 @@ public class Server{
 		while(true) {
 			try {
 				socket = servSocket.accept();
-				System.out.println("Client Connected");
+				logger.info("Client connected: {}", socket.getRemoteSocketAddress());
 				ClientHandler client = new ClientHandler(socket);
 				new Thread(client).start();
 			}catch(IOException e) {
-				e.printStackTrace();
+				logger.error("Error while accepting client connection", e);
 			}
 		}
 	}
@@ -105,7 +107,7 @@ public class Server{
 		query.setParameter("username", username);
 		User user = (User) query.uniqueResult();
 		if(user != null) {
-			System.out.println(user.getUsername());
+			logger.info("Login attempt for user {}", user.getUsername());
 			boolean isValid = checkPassword(user, password);
 			if(!isValid) {
 				user = null;
@@ -116,20 +118,18 @@ public class Server{
 	
 	private static boolean checkPassword(User user, String password) {
 		boolean result = false;
-		System.out.println(Base64.getEncoder().encodeToString(user.getPassword()));
+		logger.debug("Stored password hash (base64) for user {}: {}", user.getUsername(), Base64.getEncoder().encodeToString(user.getPassword()));
 		try {
 			
 			byte[] passHash = PasswordHashGen.genPasswordHash(password, user.getSalt());
-			System.out.println(Base64.getEncoder().encodeToString(passHash));
+			logger.debug("Computed password hash (base64) for user {}: {}", user.getUsername(), Base64.getEncoder().encodeToString(passHash));
 			if (Arrays.equals(passHash, user.getPassword())) {
 				result = true;
 			}
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Hash algorithm not available while checking password", e);
 		} catch (InvalidKeySpecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Invalid key spec while checking password", e);
 		}
 		
 		return result;
@@ -146,7 +146,7 @@ public class Server{
 				transaction.rollback();
 			}
 			session.clear();
-			e.printStackTrace();
+			logger.error("Failed to create reservation", e);
 		}
 	}
 
@@ -193,7 +193,7 @@ public class Server{
 			if (transaction != null) {
 				transaction.rollback();
 			}
-			e.printStackTrace();
+			logger.error("Failed to update reservation status for id {}", reservationId, e);
 			return false;
 		}
 	}
@@ -214,7 +214,7 @@ public class Server{
 				objectIS = new ObjectInputStream(this.clientSocket.getInputStream());
 				objectOS = new ObjectOutputStream(this.clientSocket.getOutputStream());
 			}catch(IOException e) {
-				e.printStackTrace();
+				logger.error("Failed to configure client streams", e);
 			}
 		}
 
@@ -265,11 +265,10 @@ public class Server{
 					}
 				}catch(EOFException e) {
 					// Client disconnected gracefully or abruptly
-					System.out.println("Client disconnected: " + e.getMessage());
+					logger.info("Client disconnected: {}", e.getMessage());
 					break;
 				}catch(ClassNotFoundException | IOException e) {
-					e.printStackTrace(); 
-					System.out.println("Server communication error: " + e.getMessage());
+					logger.error("Server communication error: {}", e.getMessage(), e);
 					break;
 				}
 			}
@@ -281,7 +280,7 @@ public class Server{
 
 	
 	public static void main(String[] args) {
-		System.out.println("Hellow wolrd");
+		logger.info("Starting server application");
 		new Server();
 
 	}
